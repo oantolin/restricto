@@ -4,6 +4,10 @@
 
 ;; Author: Omar Antolín Camarena <omar@matem.unam.mx>
 ;; Keywords: convenience
+;; Version: 0.1
+;; Homepage
+;; Package-Requires: ((emacs "26.1"))
+;; Homepage: https://github.com/oantolin/restricto
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -42,11 +46,17 @@
   "Stack of minibuffer completion tables.")
  
 (defun restricto--clear-mct-stack ()
+  "Clear the completion candidate restriction stack."
   (setq restricto--mct-stack nil))
 
 (defun restricto--no-default-if-restricted (&rest _)
+  "Check if a restriction has been made.
+For use as `:before-while' advice on the function
+`minibuf-eldef-update-minibuffer', to keep the default from
+reappearing after a restriction."
   (null restricto--mct-stack))
 
+;;;###autoload
 (define-minor-mode restricto-mode
   "Enable undoing of restriction to current matches.
 Restriction to current matches is done by `restricto-narrow' and
@@ -57,6 +67,7 @@ choosing in `minibuffer-local-completion-map'."
   (advice-add 'minibuf-eldef-update-minibuffer :before-while
               #'restricto--no-default-if-restricted))
 
+;;;###autoload
 (defun restricto-widen ()
   "Cancel last restriction to current completion candidates."
   (interactive)
@@ -64,6 +75,7 @@ choosing in `minibuffer-local-completion-map'."
     (setq minibuffer-completion-table (pop restricto--mct-stack))
     (delete-minibuffer-contents)))
 
+;;;###autoload
 (defun restricto-narrow ()
   "Restrict to current completion candidates."
   (interactive)
