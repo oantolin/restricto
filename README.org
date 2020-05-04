@@ -1,0 +1,25 @@
+* Overview
+
+This package provides a command to restrict minibuffer completion to
+the current completion candidates.  This is something several
+completion frameworks provide: Icicles, Ido, Ivy, Helm, Selectrum all
+have it.  It enables fast out-of-order matching.  This package is
+completion framework agnostic and can be used, for example, with the
+default minibuffer tab completion, or with Icomplete.
+
+To use, simply bind =restricto-narrow= in
+=minibuffer-local-completion-map=.  If you want to be able undo
+restriction, enable =restricto-mode= and also bind =restricto-widen=.
+
+The =restricto-mode= global minor mode will also detect if you use
+=minibuffer-electric-default-mode= and in that case ensure the default
+prompt does not reappear upon restricting.
+
+Sample configuration (put =restricto.el= somewhere in your =load-path=):
+
+#+begin_src emacs-lisp
+  (require 'restricto)
+  (restricto-mode)
+  (define-key minibuffer-local-completion-map (kbd "C-SPC" #'restricto-narrow))
+  (define-key minibuffer-local-completion-map (kbd "M-SPC" #'restricto-widen))
+#+end_src
