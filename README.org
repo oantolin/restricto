@@ -20,6 +20,6 @@ Sample configuration (put =restricto.el= somewhere in your =load-path=):
 #+begin_src emacs-lisp
   (require 'restricto)
   (restricto-mode)
-  (define-key minibuffer-local-completion-map (kbd "C-SPC" #'restricto-narrow))
-  (define-key minibuffer-local-completion-map (kbd "M-SPC" #'restricto-widen))
+  (define-key minibuffer-local-completion-map (kbd "C-SPC") #'restricto-narrow)
+  (define-key minibuffer-local-completion-map (kbd "M-SPC") #'restricto-widen)
 #+end_src
