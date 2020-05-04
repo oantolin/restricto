@@ -73,8 +73,7 @@ choosing in `minibuffer-local-completion-map'."
   (interactive)
   (when restricto--mct-stack
     (setq minibuffer-completion-table (pop restricto--mct-stack))
-    (insert " ") ; fake changes for icomplete
-    (delete-char -1)))
+    (completion--flush-all-sorted-completions)))
 
 ;;;###autoload
 (defun restricto-narrow ()
