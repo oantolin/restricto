@@ -5,7 +5,8 @@ the current completion candidates.  This is something several
 completion frameworks provide: Icicles, Ido, Ivy, Helm, Selectrum all
 have it.  It enables fast out-of-order matching.  This package is
 completion framework agnostic and can be used, for example, with the
-default minibuffer tab completion, or with Icomplete.
+default minibuffer tab completion, or with Icomplete, which don't have
+such a feature.
 
 To use, simply bind =restricto-narrow= in
 =minibuffer-local-completion-map=.  If you want to be able undo
