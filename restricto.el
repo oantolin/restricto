@@ -87,8 +87,9 @@ choosing in `minibuffer-local-completion-map'."
       (when ;; are we completing symbols rather than strings?
           (or (eq minibuffer-completion-table
                   #'help--symbol-completion-table)
-              (and (sequencep minibuffer-completion-table)
-                   (symbolp (elt minibuffer-completion-table 0))))
+              (vectorp minibuffer-completion-table) ; obarray
+              (and (consp minibuffer-completion-table)
+                   (symbolp (car minibuffer-completion-table))))
         (setq all (mapcar #'intern all)))
       (if (null (cdr all))
           (minibuffer-complete)
