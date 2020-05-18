@@ -93,7 +93,12 @@ choosing in `minibuffer-local-completion-map'."
         (setq all (mapcar #'intern all)))
       (if (null (cdr all))
           (minibuffer-complete)
-        (setq minibuffer-completion-table all)
+        (let ((mct minibuffer-completion-table))
+          (setq minibuffer-completion-table
+                (lambda (string pred action)
+                  (if (eq action 'metadata)
+                      (completion-metadata string mct pred)
+                    (complete-with-action action all string pred)))))
         (delete-minibuffer-contents)))))
 
 (provide 'restricto)
