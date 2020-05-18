@@ -75,6 +75,17 @@ choosing in `minibuffer-local-completion-map'."
     (setq minibuffer-completion-table (pop restricto--mct-stack))
     (completion--flush-all-sorted-completions)))
 
+(defun restricto--completing-symbol-p ()
+  "Are we completing symbols?"
+  (let ((mct minibuffer-completion-table))
+    (or (eq mct #'help--symbol-completion-table)
+        (vectorp mct) ; obarray
+        (and (consp mct) (symbolp (car mct)))
+        (completion-metadata-get
+         (completion-metadata (minibuffer-contents) mct
+                              minibuffer-completion-predicate)
+         'symbolsp))))
+
 ;;;###autoload
 (defun restricto-narrow ()
   "Restrict to current completion candidates."
@@ -84,12 +95,7 @@ choosing in `minibuffer-local-completion-map'."
       (when restricto-mode
         (push minibuffer-completion-table restricto--mct-stack))
       (setcdr (last all) nil)
-      (when ;; are we completing symbols rather than strings?
-          (or (eq minibuffer-completion-table
-                  #'help--symbol-completion-table)
-              (vectorp minibuffer-completion-table) ; obarray
-              (and (consp minibuffer-completion-table)
-                   (symbolp (car minibuffer-completion-table))))
+      (when (restricto--completing-symbol-p)
         (setq all (mapcar #'intern all)))
       (if (null (cdr all))
           (minibuffer-complete)
@@ -97,7 +103,8 @@ choosing in `minibuffer-local-completion-map'."
           (setq minibuffer-completion-table
                 (lambda (string pred action)
                   (if (eq action 'metadata)
-                      (completion-metadata string mct pred)
+                      (append (completion-metadata string mct pred)
+                              '((symbolsp . t)))
                     (complete-with-action action all string pred)))))
         (delete-minibuffer-contents)))))
 
