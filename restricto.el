@@ -4,7 +4,7 @@
 
 ;; Author: Omar Antolín Camarena <omar@matem.unam.mx>
 ;; Keywords: convenience
-;; Version: 0.1
+;; Version: 0.2
 ;; Homepage
 ;; Package-Requires: ((emacs "26.1"))
 ;; Homepage: https://github.com/oantolin/restricto
